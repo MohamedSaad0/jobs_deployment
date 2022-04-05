@@ -42,12 +42,12 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::group(['middleware' => ['auth:sanctum']],function() {
 
     //list all jobs
-    Route::get('/jobs', [FlutterJobController::class, 'index']);
     // Apply to a job
     //logout
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 
+Route::get('/jobs', [FlutterJobController::class, 'index']);
 Route::post('/appliedJob', [JobApplicants::class, 'store']);
 
 
