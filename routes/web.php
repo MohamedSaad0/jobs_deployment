@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\JobApplicants;
 use App\Http\Controllers\JobListController;
 use App\Http\Controllers\FlutterJobController;
-use Illuminate\Http\Request;
 
 
 /*
@@ -21,3 +22,8 @@ use Illuminate\Http\Request;
 //////////////////////////////////////////////////////////////////////////
 
 Route::resource('jobs', JobListController::class);
+
+Route::get('/applicants', [JobApplicants::class, 'show'])->name('applicants');
+Route::get('/view/{cv}', [JobApplicants::class, 'viewPdf'])->name('view');
+
+

@@ -6,8 +6,9 @@
     <body>
         <div class="container">
             <a class="btn btn-primary mt-2" href="/jobs/create"> Add New Job</a>
+            <a class="btn btn-primary mt-2" href="/applicants">Show Job Applicants</a>
         </div>
-        <table class="table container table-dark table-striped  mt-2">
+        <table class="table container table-dark table-striped mt-2">
             <thead>
                 <tr>
                     <th scope="col">Job ID</th>

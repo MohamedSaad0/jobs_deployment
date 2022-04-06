@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Job;
 use App\Models\Apply;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Collection;
+use App\Http\Resources\ApplyResource;
 class JobApplicants extends Controller
 {
     /**
@@ -33,6 +36,19 @@ class JobApplicants extends Controller
         }
         $job->save();
         return response(["You have applied successfully",$comPic]);
+    }
+
+    public function show(){
+        // $job = ApplyResource::collection(Apply::all());
+        // dd($job);
+        $job = Apply::all();
+        return view('jobs.applicants', ['job'=>$job]);
+    }
+
+    public function viewPdf($cv){
+        // echo asset('storage/cvs/');
+        $path = storage_path('app/public/cvs/'.$cv);
+        return response()->file($path);
     }
 
 }
