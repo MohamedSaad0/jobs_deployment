@@ -7,22 +7,26 @@ use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\AuthRequest;
+use App\Http\Requests\LoginRequest;
+use App\Observers\AuthObserver;
+
 
 class AuthController extends Controller
 {
     //Register Validation
-    public function register(Request $request) {
-        $fields = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|string|unique:users,email',
-            'password' => 'required|string|confirmed',
+    public function register(AuthRequest $request) {
+        // $fields = $request->validate([
+        //     'name' => 'required|string',
+        //     'email' => 'required|string|unique:users,email|email',
+        //     'password' => 'required|string|confirmed',
             // 'phone' => 'string'
-        ]);
+        // ]);
         //Store a new user in db
         $user = User::create([
-            'name' => $fields['name'],
-            'email' => $fields['email'],
-            'password' => bcrypt($fields['password']),
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
             // 'phone' => $fields['phone']
         ]);
 
@@ -43,27 +47,28 @@ class AuthController extends Controller
         return response("You logged out");
     }
 
-    public function login(Request $request) {
+    public function login(LoginRequest $request) {
 
-        $fields = $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string'
-        ]);
+        // $fields = $request->validate([
+        //     'email' => 'required|string',
+        //     'password' => 'required|string'
+        // ]);
         // Check email
-        $user = User::where('email', $fields['email'])->first();
-        if(!$user || !Hash::check($fields['password'], $user->password) ) {
-
+        $user = User::where('email', $request->email)->first();
+        if(!$user || !Hash::check($request->password, $user->password) ) {
             return response ([
                 "Message" => "FALSE RUN"
             ],  401);
-        }
-        $token = $user->createToken('myAppToken')->plainTextToken;
+        }else{
+            $token = $user->createToken('myAppToken')->plainTextToken;
 
-        $response = [
-            'user' => $user,
-            'token' => $token
-        ];
-        return response($response, 200);
+            $response = [
+                'user' => $user,
+                'token' => $token
+            ];
+            return response($response, 200);
+        }
+
         // return response([$response, "message" => "You have logged in successfully"]);
     }
 }
